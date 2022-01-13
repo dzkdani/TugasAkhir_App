@@ -158,13 +158,13 @@ class _SignUpState extends State<SignUp> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Invalid"),
-          duration: Duration(seconds: 5),
+          duration: Duration(seconds: 3),
         ));
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Email/Username has been taken"),
-          duration: Duration(seconds: 5)));
+          duration: Duration(seconds: 3)));
     }
   }
 }

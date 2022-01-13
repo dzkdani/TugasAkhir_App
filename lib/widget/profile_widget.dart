@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_autonomous_learning_app/common/utils.dart';
 
 Widget profileStats({Size? screen, Color? color}) {
+  int postCount = 0;
+  int savedCount = 0;
+
   return Container(
     padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
     color: color,
@@ -24,8 +27,8 @@ Widget profileStats({Size? screen, Color? color}) {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              statsBox(count: '0', title: 'Posts'),
-              statsBox(count: '0', title: 'Saved'),
+              statsBox(count: postCount.toString(), title: 'Posts'),
+              statsBox(count: savedCount.toString(), title: 'Saved'),
             ],
           ),
         ),
@@ -35,6 +38,8 @@ Widget profileStats({Size? screen, Color? color}) {
 }
 
 Widget bio({required Color primaryColor}) {
+  String bioDesc = 'about me';
+
   return Container(
     color: Colors.white10,
     height: 50,
@@ -71,13 +76,14 @@ Widget editProfile(
         color: Colors.white30,
       ),
       child: const Center(
-          child: Text(
-        'Edit Profile',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
+        child: Text(
+          'Edit Profile',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
         ),
-      )),
+      ),
     ),
   );
 }

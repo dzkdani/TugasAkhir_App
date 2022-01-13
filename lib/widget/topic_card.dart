@@ -16,6 +16,10 @@ class _TopicState extends State<Topic> {
 }
 
 Widget TopicCard(BuildContext context) {
+  String username = "yang ngepost";
+  String title = "judul post";
+  String desc = "deskripsi post";
+
   return Card(
     elevation: 3,
     color: Colors.white,
@@ -41,7 +45,7 @@ Widget TopicCard(BuildContext context) {
                 alignment: Alignment.bottomLeft,
                 padding: EdgeInsets.only(left: 5, top: 10, bottom: 10),
                 child: Text(
-                  'kang ngepost',
+                  username,
                   style: TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 14,
@@ -59,7 +63,7 @@ Widget TopicCard(BuildContext context) {
                   margin: EdgeInsets.only(left: 5),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'judulPostingane',
+                    title,
                     style: TextStyle(
                         fontFamily: 'Roboto',
                         fontSize: 18,
@@ -70,7 +74,7 @@ Widget TopicCard(BuildContext context) {
                   margin: EdgeInsets.only(left: 5),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'desckrispi',
+                    desc,
                     style: TextStyle(
                       fontFamily: 'Roboto',
                       fontSize: 14,

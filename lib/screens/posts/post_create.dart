@@ -27,10 +27,10 @@ class _CreatePostState extends State<CreatePost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.save_rounded),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   child: Icon(Icons.save_rounded),
+      // ),
       appBar: AppBar(
         title: Text('Post a Topic'),
         centerTitle: true,
@@ -40,7 +40,7 @@ class _CreatePostState extends State<CreatePost> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(
-                top: 30.0, left: 50.0, right: 50.0, bottom: 10.0),
+                top: 30.0, left: 50.0, right: 50.0, bottom: 5.0),
             child: TextFormField(
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
@@ -56,7 +56,7 @@ class _CreatePostState extends State<CreatePost> {
           ),
           Padding(
             padding:
-                const EdgeInsets.only(left: 50.0, right: 50.0, bottom: 10.0),
+                const EdgeInsets.only(left: 50.0, right: 50.0, bottom: 5.0),
             child: TextFormField(
               keyboardType: TextInputType.multiline,
               maxLines: null,
@@ -101,7 +101,7 @@ class _CreatePostState extends State<CreatePost> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
-                        top: 30.0, left: 50.0, right: 50.0, bottom: 10.0),
+                        top: 10.0, left: 50.0, right: 50.0, bottom: 5.0),
                     child: TextFormField(
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(
@@ -118,7 +118,7 @@ class _CreatePostState extends State<CreatePost> {
                   Column(children: [
                     Padding(
                       padding: const EdgeInsets.only(
-                          left: 50.0, right: 50.0, bottom: 10.0),
+                          left: 50.0, right: 50.0, bottom: 5.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(

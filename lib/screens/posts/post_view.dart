@@ -49,6 +49,11 @@ class _PostCardState extends State<PostCard> {
   //comment
   TextEditingController commentController = TextEditingController();
 
+  //saved
+  String saveText = 'save';
+  bool isSaved = false;
+  Color savedColors = Colors.white;
+
   @override
   Widget build(BuildContext context) {
     return Topic(context, 'userx', '2021-07-27 02:35:35');
@@ -110,6 +115,36 @@ class _PostCardState extends State<PostCard> {
               child: Container(
                 alignment: Alignment.topRight,
                 child: Text(dateCreated),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width - 100),
+              child: Container(
+                height: 30,
+                width: 90,
+                decoration: BoxDecoration(
+                  color: savedColors,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  ),
+                ),
+                child: MaterialButton(
+                  onPressed: () => setState(() {
+                    if (isSaved == false) {
+                      saveText = 'saved';
+                      savedColors = Colors.blue;
+                      isSaved = true;
+                    } else {
+                      saveText = 'save';
+                      savedColors = Colors.white;
+                      isSaved = false;
+                    }
+                  }),
+                  child: Text(
+                    saveText,
+                  ),
+                ),
               ),
             ),
             Padding(
@@ -282,4 +317,6 @@ class _PostCardState extends State<PostCard> {
   void _sendComment(String comment) {}
 
   void _sendLike() {}
+
+  void _addToSavedTopic() {}
 }

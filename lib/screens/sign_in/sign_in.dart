@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_autonomous_learning_app/constant.dart';
@@ -164,6 +165,9 @@ class _SignInPageState extends State<SignInPage> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setBool('isUser', true);
           await prefs.setString('token', token);
+
+          print(prefs.get('token')); //how to get the token
+
           Future.delayed(
             Duration(seconds: 1),
             () {
@@ -176,16 +180,16 @@ class _SignInPageState extends State<SignInPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Invalid"),
-            duration: Duration(seconds: 5),
+            duration: Duration(seconds: 3),
           ),
         );
       }
     } catch (e) {
-      print('alah kontol');
+      print(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Username/Password is Incorrect"),
-          duration: Duration(seconds: 5),
+          duration: Duration(seconds: 3),
         ),
       );
     }

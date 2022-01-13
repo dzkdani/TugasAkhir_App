@@ -21,6 +21,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     var _screenSize = MediaQuery.of(context).size;
     var _pageIndex;
+
+    int postCount = 3;
+    int savedCount = 7;
+
     return Scaffold(
       appBar: InstaAppBar(
         height: 80,

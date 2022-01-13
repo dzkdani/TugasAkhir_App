@@ -16,7 +16,6 @@ class _FeedsScreenState extends State<FeedsScreen> {
       appBar: AppBar(
         title: Text('Feeds'),
         centerTitle: true,
-        backwardsCompatibility: false,
         leading: Container(),
       ),
       body: Padding(
