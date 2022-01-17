@@ -34,6 +34,5 @@ class _AppState extends State<App> {
     } else {
       _isLogin = false;
     }
-    ;
   }
 }

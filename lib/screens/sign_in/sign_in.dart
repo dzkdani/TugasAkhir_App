@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_autonomous_learning_app/constant.dart';
 import 'package:flutter_autonomous_learning_app/widget/navigation_bar.dart';
 import '../sign_up/sign_up.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,7 +32,7 @@ class _SignInPageState extends State<SignInPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-                padding: EdgeInsets.only(top: 180, right: 10),
+                padding: const EdgeInsets.only(top: 180, right: 10),
                 height: 280,
                 width: 310,
                 child: const Text(
@@ -95,7 +93,7 @@ class _SignInPageState extends State<SignInPage> {
                         fontSize: 18,
                       ))),
             ),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width / 2.2,
               height: 50,
               child: MaterialButton(
@@ -106,7 +104,7 @@ class _SignInPageState extends State<SignInPage> {
                           decoration: TextDecoration.underline))),
             ),
             Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: const Text(
                   'First Time? Learn new things and ',
                   style: TextStyle(
@@ -139,7 +137,7 @@ class _SignInPageState extends State<SignInPage> {
           gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [kPrimaryColor, Colors.white]),
+              colors: [Colors.blue, Colors.white]),
         ),
       )),
     );
@@ -166,10 +164,10 @@ class _SignInPageState extends State<SignInPage> {
           prefs.setBool('isUser', true);
           await prefs.setString('token', token);
 
-          print(prefs.get('token')); //how to get the token
+          //print(prefs.get('token')); //how to get the token
 
           Future.delayed(
-            Duration(seconds: 1),
+            const Duration(seconds: 1),
             () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => NavBar()));
@@ -185,7 +183,6 @@ class _SignInPageState extends State<SignInPage> {
         );
       }
     } catch (e) {
-      print(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Username/Password is Incorrect"),

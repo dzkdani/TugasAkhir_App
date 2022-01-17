@@ -1,4 +1,10 @@
+import 'dart:ffi';
+import 'dart:io';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreatePost extends StatefulWidget {
   const CreatePost({Key? key}) : super(key: key);
@@ -8,10 +14,10 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _descController = TextEditingController();
-  TextEditingController _refsTitleController = TextEditingController();
-  TextEditingController _refsUrlController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descController = TextEditingController();
+  final TextEditingController _refsTitleController = TextEditingController();
+  final TextEditingController _refsUrlController = TextEditingController();
   bool isTopicSubmitted = false;
   bool isReferenceSubmittedVisible = false;
 
@@ -27,12 +33,8 @@ class _CreatePostState extends State<CreatePost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   child: Icon(Icons.save_rounded),
-      // ),
       appBar: AppBar(
-        title: Text('Post a Topic'),
+        title: const Text('Post a Topic'),
         centerTitle: true,
       ),
       body: Column(
@@ -75,7 +77,7 @@ class _CreatePostState extends State<CreatePost> {
           Container(
             width: MediaQuery.of(context).size.width / 3.2,
             height: 50,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(30)),
               color: Colors.blue,
             ),
@@ -83,7 +85,7 @@ class _CreatePostState extends State<CreatePost> {
               disabledColor: Colors.grey,
               onPressed: () {
                 setState(() {
-                  isTopicSubmitted ? () => null : _submitTopic();
+                  isTopicSubmitted ? () => null : _createTopic();
                 });
               },
               child: const Text(
@@ -135,7 +137,7 @@ class _CreatePostState extends State<CreatePost> {
                     Container(
                       width: MediaQuery.of(context).size.width / 2.7,
                       height: 50,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(30)),
                         color: Colors.blue,
                       ),
@@ -163,13 +165,64 @@ class _CreatePostState extends State<CreatePost> {
     );
   }
 
-  void _submitTopic() {
-    print('object');
-    isTopicSubmitted = true;
+  int _currentTopicID = 0;
+  Future<void> _createTopic() async {
+    const url = 'https://aku.ndaktau.com/api/topic';
+    const param = '/topic';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    try {
+      if (_titleController.text.isNotEmpty && _descController.text.isNotEmpty) {
+        final response = await http.post(Uri.parse(url), headers: {
+          HttpHeaders.authorizationHeader: 'Bearer $token'
+        }, body: {
+          'title': _titleController.text,
+          'description': _descController.text,
+          'is_public': '1'
+        });
+        var json = jsonDecode(response.body) as Map;
+        Map data = json['data'];
+        if (json['errorCode'] == '00') {
+          _currentTopicID = data['id'];
+          isTopicSubmitted = true;
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
-  void _addReference() {
+  Future<void> _addReference() async {
     _refsTitleController.clear();
     _refsUrlController.clear();
+
+    var url = 'https://aku.ndaktau.com/api/topic/' +
+        _currentTopicID.toString() +
+        "/note";
+    const param = '/topic/idTopic/note';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    try {
+      if (_refsTitleController.text.isNotEmpty &&
+          _refsUrlController.text.isNotEmpty) {
+        final response = await http.post(Uri.parse(url), headers: {
+          HttpHeaders.authorizationHeader: 'Bearer $token'
+        }, body: {
+          'title': _refsTitleController.text,
+          'url': _refsUrlController.text,
+          'is_public': '1',
+          'desc': " "
+        });
+        var json = jsonDecode(response.body) as Map;
+        Map data = json['data'];
+        if (json['errorCode'] == '00') {
+          print(data.toString());
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

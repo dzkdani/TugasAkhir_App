@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_autonomous_learning_app/screens/explore/explore_screen.dart';
 import 'package:flutter_autonomous_learning_app/screens/feeds/feeds_screen.dart';
-import 'package:flutter_autonomous_learning_app/screens/posts/post_view.dart';
 import 'package:flutter_autonomous_learning_app/screens/profile/profile_screen.dart';
 
 class NavBar extends StatefulWidget {
@@ -14,7 +13,7 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int _currentIndex = 0;
   final List<Widget> _screens = <Widget>[
-    FeedsScreen(), //Text("Feeds"), //change to feeds
+    const FeedsScreen(),
     ExploreScreen(),
     ProfileScreen(),
   ];

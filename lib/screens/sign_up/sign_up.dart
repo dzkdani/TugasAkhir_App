@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_autonomous_learning_app/constant.dart';
 import 'package:flutter_autonomous_learning_app/screens/splash/splash.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +27,7 @@ class _SignUpState extends State<SignUp> {
             gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [kPrimaryColor, Colors.white]),
+                colors: [Colors.blue, Colors.white]),
           ),
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height,

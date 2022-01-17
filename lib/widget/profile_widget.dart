@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_autonomous_learning_app/common/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Widget profileStats({Size? screen, Color? color}) {
   int postCount = 0;
@@ -37,24 +38,23 @@ Widget profileStats({Size? screen, Color? color}) {
   );
 }
 
-Widget bio({required Color primaryColor}) {
-  String bioDesc = 'about me';
-
+Widget bio({required Color primaryColor, required String bio}) {
   return Container(
     color: Colors.white10,
     height: 50,
-    padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+    padding: const EdgeInsets.only(left: 10, right: 10, top: 1, bottom: 1),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const Center(
+        Center(
           child: Text(
-            'bio',
-            style: TextStyle(
+            bio,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
+            textAlign: TextAlign.center,
           ),
         ),
       ],
@@ -131,8 +131,8 @@ Widget profileAvatar({
             shape: BoxShape.circle,
           ),
           child: CircleAvatar(
-            backgroundImage:
-                NetworkImage(Utils.getRandomImageUrl()), //get profile pic
+            backgroundImage: NetworkImage(
+                "https://cdn.discordapp.com/attachments/881938537690300547/932467686963830864/FJQVnRyXMAUWQhb.png"), //get profile pic
           ),
         ),
       ),

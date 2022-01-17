@@ -1,8 +1,27 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter_autonomous_learning_app/screens/posts/comments/comment_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 class PostCard extends StatefulWidget {
+  final String TopicOwner; //id
+  final String TopicTitle;
+  final String TopicDesc;
+  final String TopicDate;
+  const PostCard(
+      {Key? key,
+      required this.TopicOwner,
+      required this.TopicTitle,
+      required this.TopicDesc,
+      required this.TopicDate})
+      : super(key: key);
+
   @override
   State<PostCard> createState() => _PostCardState();
 }
@@ -10,31 +29,9 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   @override
   void initState() {
+    _getReferences();
     super.initState();
   }
-
-  //topic
-  List<Map> topics = [];
-  List<String> topicsTitle = ['pics'];
-  List<String> topicsDesc = ['desctop'];
-  //references
-  List<Map> references = [];
-  List<String> referencesUrl = [
-    'https://twitter.com/home',
-    'https://www.youe.com/',
-    'https://www.facebook.com/',
-    'https://www.facebook.com/',
-    'https://www.facebook.com/',
-    'https://www.facebook.com/',
-  ];
-  List<String> referencesTitle = [
-    'reftitle',
-    'another one',
-    'and another one',
-    'and another one',
-    'and another one',
-    'and another one'
-  ];
 
   //follow
   String followText = 'follow';
@@ -56,10 +53,12 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Topic(context, 'userx', '2021-07-27 02:35:35');
+    return Topic(context, widget.TopicOwner, widget.TopicDate,
+        widget.TopicTitle, widget.TopicDesc);
   }
 
-  Scaffold Topic(BuildContext context, String owner, String dateCreated) {
+  Scaffold Topic(BuildContext context, String owner, String dateCreated,
+      String title, String desc) {
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -72,10 +71,10 @@ class _PostCardState extends State<PostCard> {
                   child: CircleAvatar(),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(5),
                   child: Container(
                     alignment: Alignment.topLeft,
-                    child: Text(owner),
+                    child: Text('User ' + owner),
                   ),
                 ),
                 Padding(
@@ -150,7 +149,7 @@ class _PostCardState extends State<PostCard> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
-                'title',
+                title,
                 style: TextStyle(
                     fontSize: 32,
                     fontFamily: 'Roboto',
@@ -160,7 +159,7 @@ class _PostCardState extends State<PostCard> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
-                'The onPressed method in this RaisedButton is actually not doing anything. It just creates a new FutureBuilder which does nothing but existing^^ Its like you would just call 1+1;, which just creates a value, but that value is not used to do anything.',
+                desc,
                 style: TextStyle(fontFamily: 'Roboto', fontSize: 16),
                 textAlign: TextAlign.justify,
               ),
@@ -184,6 +183,7 @@ class _PostCardState extends State<PostCard> {
                   onPressed: () {
                     setState(() {
                       _sendComment(commentController.text);
+                      commentController.clear();
                     });
                   },
                   child: Icon(
@@ -234,7 +234,9 @@ class _PostCardState extends State<PostCard> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CommentScreen()));
+                            builder: (context) => CommentScreen(
+                                  CurrentTopicID: widget.TopicOwner,
+                                )));
                   },
                   child: Container(
                     height: 28,
@@ -275,9 +277,33 @@ class _PostCardState extends State<PostCard> {
     );
   }
 
+  List<Map> References = <Map>[];
+  Future<void> _getReferences() async {
+    var url = 'https://aku.ndaktau.com/api/topic/' +
+        widget.TopicOwner.toString() +
+        '/note';
+    const param = '/topic/id/note';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    try {
+      var response = await http.get(Uri.parse(url),
+          headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
+      var json = jsonDecode(response.body) as Map;
+      Map data = json['data'];
+      print(json['errorCode'].toString());
+      if (json['errorCode'] == '00') {
+        References = data as List<Map>;
+        setState(() {});
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Widget TopicReferences() {
     return ListView.separated(
-      itemCount: referencesTitle.length,
+      itemCount: References == null ? 0 : References.length,
       itemBuilder: (context, index) => Container(
         width: MediaQuery.of(context).size.width / 3,
         height: 50,
@@ -285,10 +311,10 @@ class _PostCardState extends State<PostCard> {
           padding: EdgeInsets.all(10),
           color: Colors.blue,
           onPressed: () {
-            _launchURL('${referencesUrl[index]}');
+            _launchURL('${References[index]['url']}');
           },
           child: Text(
-            '${referencesTitle[index]}',
+            '${References[index]['title']}',
             style: TextStyle(
               color: Colors.black,
               fontSize: 20,
@@ -314,7 +340,30 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
-  void _sendComment(String comment) {}
+  Future<void> _sendComment(String _comment) async {
+    var url = 'https://aku.ndaktau.com/api/topic/' +
+        widget.TopicOwner.toString() +
+        '/comment';
+    const param = '/topic';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    try {
+      if (commentController.text.isNotEmpty) {
+        final response = await http.post(Uri.parse(url),
+            headers: {HttpHeaders.authorizationHeader: 'Bearer $token'},
+            body: {'content': commentController.text});
+        var json = jsonDecode(response.body) as Map;
+        Map data = json['data'];
+        if (json['errorCode'] == '00') {
+          print(data['content'].toString());
+          setState(() {});
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   void _sendLike() {}
 

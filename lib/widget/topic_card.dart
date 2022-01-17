@@ -1,5 +1,9 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_autonomous_learning_app/screens/posts/post_view.dart';
+import 'package:flutter_autonomous_learning_app/screens/feeds/feeds_screen.dart';
+import 'package:flutter_autonomous_learning_app/screens/profile/profile_screen.dart';
 
 class Topic extends StatefulWidget {
   const Topic({Key? key}) : super(key: key);
@@ -10,27 +14,35 @@ class Topic extends StatefulWidget {
 
 class _TopicState extends State<Topic> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return TopicCard(context);
+    return Container();
   }
 }
 
-Widget TopicCard(BuildContext context) {
-  String username = "yang ngepost";
-  String title = "judul post";
-  String desc = "deskripsi post";
+Widget TopicCard(BuildContext context, int index) {
+  int _topicID = Topics[index]['id'];
 
   return Card(
     elevation: 3,
     color: Colors.white,
     shadowColor: Colors.black,
-    margin: EdgeInsets.all(5.0),
+    margin: const EdgeInsets.all(5.0),
     child: MaterialButton(
       onPressed: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PostCard(),
+            builder: (context) => PostCard(
+              TopicOwner: _topicID.toString(),
+              TopicTitle: Topics[index]['title'],
+              TopicDesc: Topics[index]['description'],
+              TopicDate: Topics[index]['created_at'],
+            ),
           ),
         );
       },
@@ -40,13 +52,13 @@ Widget TopicCard(BuildContext context) {
         children: [
           Row(
             children: [
-              CircleAvatar(),
+              const CircleAvatar(),
               Container(
                 alignment: Alignment.bottomLeft,
                 padding: EdgeInsets.only(left: 5, top: 10, bottom: 10),
                 child: Text(
-                  username,
-                  style: TextStyle(
+                  "UserID: " + Topics[index]['user_id'].toString(),
+                  style: const TextStyle(
                     fontFamily: 'Roboto',
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -60,22 +72,22 @@ Widget TopicCard(BuildContext context) {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 5),
+                  margin: const EdgeInsets.only(left: 5),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    title,
-                    style: TextStyle(
+                    Topics[index]['title'],
+                    style: const TextStyle(
                         fontFamily: 'Roboto',
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 5),
+                  margin: const EdgeInsets.only(left: 5),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    desc,
-                    style: TextStyle(
+                    Topics[index]['description'],
+                    style: const TextStyle(
                       fontFamily: 'Roboto',
                       fontSize: 14,
                     ),
